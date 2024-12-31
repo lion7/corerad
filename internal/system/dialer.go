@@ -258,6 +258,10 @@ func (d *Dialer) setAutoconf() (func() error, error) {
 		return nil, fmt.Errorf("failed to get IPv6 autoconfiguration state on %q: %v", d.iface, err)
 	}
 
+	if !prev {
+		return nil, nil
+	}
+
 	if err := d.state.SetIPv6Autoconf(d.iface, false); err != nil {
 		if errors.Is(err, os.ErrPermission) {
 			// Continue anyway but provide a hint.
